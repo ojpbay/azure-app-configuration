@@ -1,4 +1,5 @@
 using Azure.Identity;
+using TestAppConfig;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,6 +16,9 @@ builder.Configuration.AddAzureAppConfiguration(options =>
 
 // Add services to the container.
 builder.Services.AddRazorPages();
+
+// Bind configuration "TestApp:Settings" section to the Settings object
+builder.Services.Configure<Settings>(builder.Configuration.GetSection("TestApp:Settings"));
 
 var app = builder.Build();
 
