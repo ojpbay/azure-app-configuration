@@ -1,18 +1,13 @@
-using Azure.Identity;
 using TestAppConfig;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Retrieve the app configuration endpoint
-string endpoint = builder.Configuration.GetValue<string>("Endpoints:AppConfiguration")
-    ?? throw new InvalidOperationException("The setting `Endpoints:AppConfiguration` was not found.");
+// Retrieve the connection string
+string connectionString = builder.Configuration.GetConnectionString("AppConfiguration")
+    ?? throw new InvalidOperationException("The connection string 'AppConfiguration' was not found.");
 
-// Load configuration from Azure App Configuration 
-builder.Configuration.AddAzureAppConfiguration(options =>
-{
-    options.Connect(new Uri(endpoint), new DefaultAzureCredential());
-});
-
+// Load configuration from Azure App Configuration
+builder.Configuration.AddAzureAppConfiguration(connectionString);
 
 // Add services to the container.
 builder.Services.AddRazorPages();
